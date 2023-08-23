@@ -1,0 +1,1 @@
+# Test.RabbitMq.Shop

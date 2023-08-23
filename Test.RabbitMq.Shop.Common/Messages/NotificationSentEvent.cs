@@ -2,9 +2,9 @@
 
 public class NotificationSentEvent
 {
-    public NotificationSentEvent(Guid id, Guid orderId)
+    public NotificationSentEvent(Guid orderId)
     {
-        Id = id;
+        Id = Guid.NewGuid();
         OrderId = orderId;
         EventDateTime = DateTime.Now;
     }

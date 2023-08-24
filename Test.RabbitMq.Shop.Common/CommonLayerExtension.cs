@@ -1,6 +1,5 @@
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
-using Test.RabbitMq.Shop.Common.Messages;
 
 namespace Test.RabbitMq.Shop.Common;
 
@@ -10,23 +9,23 @@ public static class CommonLayerExtension
     {
         services.AddScoped<OrderCreatedConsumer>();
         
-        services.AddMassTransit(registrationConfigurator =>
+        services.AddMassTransit(x =>
         {
-            registrationConfigurator.AddConsumer<OrderCreatedConsumer>();
-            registrationConfigurator.AddConsumer<NotificationSentConsumer>();
+            x.AddConsumer<OrderCreatedConsumer>();
+            x.AddConsumer<NotificationSentConsumer>();
             
-            registrationConfigurator.UsingRabbitMq((context, factoryConfigurator) =>
+            x.UsingRabbitMq((context, cfg) =>
             {
-                factoryConfigurator.Host("localhost", hostConfigurator =>
+                cfg.Host("localhost", "/", h =>
                 {
-                    hostConfigurator.Username("guest");
-                    hostConfigurator.Password("guest");
+                    h.Username("guest");
+                    h.Password("guest");
                 });
                 
-                factoryConfigurator.ReceiveEndpoint("order_saga", consumer =>
+                cfg.ReceiveEndpoint("order_saga", c =>
                 {
-                    consumer.ConfigureConsumer<OrderCreatedConsumer>(context);
-                    consumer.ConfigureConsumer<NotificationSentConsumer>(context);
+                    c.ConfigureConsumer<OrderCreatedConsumer>(context);
+                    c.ConfigureConsumer<NotificationSentConsumer>(context);
                 });
             });
         });

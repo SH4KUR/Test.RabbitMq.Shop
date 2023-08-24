@@ -2,13 +2,16 @@
 
 public class OrderCreatedEvent : BaseEvent
 {
-    public OrderCreatedEvent(int productId, int productQuantity, decimal orderPrice)
+    public OrderCreatedEvent(Guid correlationId, int orderId, int productId, int productQuantity, decimal orderPrice) 
+        : base(correlationId)
     {
+        OrderId = orderId;
         ProductId = productId;
         ProductQuantity = productQuantity;
         OrderPrice = orderPrice;
     }
 
+    public int OrderId { get; set; }
     public int ProductId { get; set; }
     public int ProductQuantity { get; set; }
     public decimal OrderPrice { get; set; }

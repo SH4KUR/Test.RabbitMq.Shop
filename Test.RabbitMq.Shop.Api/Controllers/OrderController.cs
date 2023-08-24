@@ -26,7 +26,9 @@ public class OrderController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<Order>> Get()
     {
-        return Ok(_orderRepository.GetOrders());
+        return Ok(_orderRepository
+            .GetOrders()
+            .OrderByDescending(o => o.CreationDateTime));
     }
     
     [HttpPost]
@@ -41,6 +43,8 @@ public class OrderController : ControllerBase
         _orderRepository.AddOrder(order);
         
         _publishEndpoint.Publish(new OrderCreatedEvent(
+            Guid.NewGuid(), 
+            order.Id,
             product.Id, 
             order.ProductQuantity, 
             order.OrderPrice));

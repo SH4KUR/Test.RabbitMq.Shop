@@ -20,7 +20,9 @@ public class ProductController : ControllerBase
     [HttpGet]
     public ActionResult<IEnumerable<Product>> Get()
     {
-        return Ok(_productRepository.GetProducts());
+        return Ok(_productRepository
+            .GetProducts()
+            .OrderBy(p => p.Id));
     }
     
     [HttpGet("id")]

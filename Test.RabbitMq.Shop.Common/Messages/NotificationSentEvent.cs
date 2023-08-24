@@ -2,10 +2,10 @@
 
 public class NotificationSentEvent : BaseEvent
 {
-    public NotificationSentEvent(Guid orderId)
+    public NotificationSentEvent(Guid correlationId, int orderId) : base(correlationId)
     {
         OrderId = orderId;
     }
 
-    public Guid OrderId { get; set; }
+    public int OrderId { get; set; }
 }

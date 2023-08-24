@@ -15,6 +15,7 @@ public static class DataLayerExtension
         services.AddScoped<TestDataSeeder>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
             
         return services;
     }

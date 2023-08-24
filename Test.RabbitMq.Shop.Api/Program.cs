@@ -1,9 +1,12 @@
+using Test.RabbitMq.Shop.Common;
 using Test.RabbitMq.Shop.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDataDependencies();
+builder.Services
+    .AddDataLayerDependencies()
+    .AddCommonLayerDependencies();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

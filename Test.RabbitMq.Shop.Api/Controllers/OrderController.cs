@@ -1,4 +1,6 @@
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Test.RabbitMq.Shop.Common.Messages;
 using Test.RabbitMq.Shop.Core.Entities;
 using Test.RabbitMq.Shop.Core.Interfaces;
 
@@ -11,12 +13,14 @@ public class OrderController : ControllerBase
     private readonly ILogger<OrderController> _logger;
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
+    private readonly IPublishEndpoint _publishEndpoint;
 
-    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository)
+    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
+        _publishEndpoint = publishEndpoint;
     }
 
     [HttpGet]
@@ -35,6 +39,12 @@ public class OrderController : ControllerBase
         }
         
         _orderRepository.AddOrder(order);
+        
+        _publishEndpoint.Publish(new OrderCreatedEvent(
+            product.Id, 
+            order.ProductQuantity, 
+            order.OrderPrice));
+        
         return Ok();
     }
 }

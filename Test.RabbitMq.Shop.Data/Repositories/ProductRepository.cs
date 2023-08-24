@@ -17,7 +17,7 @@ public class ProductRepository : IProductRepository
         return _context.Products;
     }
 
-    public Product? GetProduct(Guid id)
+    public Product? GetProduct(int id)
     {
         return _context.Products.FirstOrDefault(p => p.Id == id);
     }

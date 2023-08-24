@@ -24,7 +24,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet("id")]
-    public ActionResult<Product> Get(Guid id)
+    public ActionResult<Product> Get(int id)
     {
         var product = _productRepository.GetProduct(id);
         if (product == null)

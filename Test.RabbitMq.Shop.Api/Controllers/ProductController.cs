@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Test.RabbitMq.Shop.Core.Entities;
+using Test.RabbitMq.Shop.Api.Helpers;
+using Test.RabbitMq.Shop.Api.Models;
 using Test.RabbitMq.Shop.Core.Interfaces;
 
 namespace Test.RabbitMq.Shop.Api.Controllers;
@@ -18,15 +19,18 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Product>> Get()
+    public ActionResult<IEnumerable<ProductModel>> Get()
     {
-        return Ok(_productRepository
+        var model = _productRepository
             .GetProducts()
-            .OrderBy(p => p.Id));
+            .OrderBy(p => p.Id)
+            .Select(EntityMapper.MapProductToModel);
+        
+        return Ok(model);
     }
-    
+
     [HttpGet("id")]
-    public ActionResult<Product> Get(int id)
+    public ActionResult<ProductModel> Get(int id)
     {
         var product = _productRepository.GetProduct(id);
         if (product == null)
@@ -34,6 +38,6 @@ public class ProductController : ControllerBase
             return NotFound();
         }
         
-        return Ok(product);
+        return Ok(EntityMapper.MapProductToModel(product));
     }
 }

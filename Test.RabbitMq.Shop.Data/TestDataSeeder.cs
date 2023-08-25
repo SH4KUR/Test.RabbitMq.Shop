@@ -23,9 +23,7 @@ public class TestDataSeeder
     {
         _context.Orders.Add(new Order
         {
-            // Id = Guid.NewGuid(),
-            // ProductId = new Guid("5FCAB8F3-E575-47B9-83D9-7BC62BBF6819"),
-            Id = 1,
+            Id = Guid.NewGuid(),
             ProductId = 1,
             ProductQuantity = 1,
             OrderPrice = (decimal)99.99,

@@ -1,9 +1,11 @@
-namespace Test.RabbitMq.Shop.Core.Entities;
+using System.Data.Common;
 
-public class Order
+namespace Test.RabbitMq.Shop.Api.Models;
+
+public class OrderModel
 {
     public Guid Id { get; set; }
-    public int ProductId { get; set; }
+    public ProductModel Product { get; set; }
     public int ProductQuantity { get; set; }
     public decimal OrderPrice { get; set; }
     public DateTime CreationDateTime { get; set; }

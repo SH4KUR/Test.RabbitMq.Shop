@@ -16,13 +16,17 @@ public class OrderController : ControllerBase
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IBus _bus;
+    private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint)
+    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
     {
         _logger = logger;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _publishEndpoint = publishEndpoint;
+        _sendEndpointProvider = sendEndpointProvider;
+        _bus = bus;
     }
 
     [HttpGet]
@@ -38,7 +42,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPost]
-    public ActionResult Post(CreateOrderModel model)
+    public async Task<ActionResult> Post(CreateOrderModel model)
     {
         var product = _productRepository.GetProduct(model.ProductId);
         if (product == null)
@@ -58,12 +62,19 @@ public class OrderController : ControllerBase
         
         _logger.LogInformation($"Order {newOrder.Id} added");
         
-        _publishEndpoint.Publish(new OrderCreatedEvent(
-            Guid.NewGuid(), 
+        // await _publishEndpoint.Publish(new OrderCreatedEvent(
+        await _bus.Publish(new OrderCreatedEvent(
             newOrder.Id,
             product.Id, 
             model.ProductQuantity, 
             newOrder.OrderPrice));
+        
+        // var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:order-saga"));
+        // await sendEndpoint.Send(new OrderCreatedEvent( 
+        //     newOrder.Id,
+        //     product.Id, 
+        //     model.ProductQuantity, 
+        //     newOrder.OrderPrice));
         
         _logger.LogInformation($"OrderCreatedEvent message published");
         

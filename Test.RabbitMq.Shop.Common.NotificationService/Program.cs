@@ -5,10 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
-    x.SetKebabCaseEndpointNameFormatter();
+    //x.SetKebabCaseEndpointNameFormatter();
+
+    // x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+    //     .Endpoint(e => { e.Name = "order-saga"; })
+    //     .InMemoryRepository();
     
-    x.AddConsumer<OrderCreatedConsumer>();
-    x.AddConsumer<NotificationSentConsumer>();
+    x.AddConsumer<SendNotificationConsumer>();
+    // x.AddRequestClient<SendNotificationConsumer>();
+    x.AddConsumer<CheckNotificationConsumer>();
+    // x.AddRequestClient<CheckNotificationConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -18,11 +24,17 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
                 
-        cfg.ReceiveEndpoint("order_saga", c =>
+        cfg.ReceiveEndpoint("order-saga", c =>
         {
-            c.ConfigureConsumer<OrderCreatedConsumer>(context);
-            c.ConfigureConsumer<NotificationSentConsumer>(context);
+            // c.ConfigureSaga<OrderState>(context);
+            
+            c.UseMessageRetry(r => r.Interval(5, 1000));
+            
+            c.ConfigureConsumer<SendNotificationConsumer>(context);
+            c.ConfigureConsumer<CheckNotificationConsumer>(context);
         });
+        
+        //cfg.ConfigureEndpoints(context);
     });
 });
 

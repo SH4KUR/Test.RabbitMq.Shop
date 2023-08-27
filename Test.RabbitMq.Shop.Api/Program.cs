@@ -8,7 +8,7 @@ builder.Services.AddDataLayerDependencies();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.SetKebabCaseEndpointNameFormatter();
+    //x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", "/", h =>

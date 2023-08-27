@@ -2,14 +2,14 @@
 
 namespace Test.RabbitMq.Shop.Common.Messages;
 
-public interface INotificationSentEvent : CorrelatedBy<Guid>
+public interface ISendNotificationEvent : CorrelatedBy<Guid>
 {
     public Guid OrderId { get; set; }
 }
 
-public class NotificationSentEvent : INotificationSentEvent
+public class SendNotificationEvent : ISendNotificationEvent
 {
-    public NotificationSentEvent(Guid correlationId, Guid orderId)
+    public SendNotificationEvent(Guid correlationId, Guid orderId)
     {
         CorrelationId = correlationId;
         OrderId = orderId;

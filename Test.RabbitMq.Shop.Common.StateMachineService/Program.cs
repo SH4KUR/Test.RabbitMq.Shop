@@ -26,7 +26,7 @@ builder.Services.AddMassTransit(x =>
             const int ConcurrencyLimit = 20; // this can go up, depending upon the database capacity
 
             c.PrefetchCount = ConcurrencyLimit;
-            c.StateMachineSaga<OrderState>(context);
+            //c.StateMachineSaga<OrderState>(context);
             
             // c.ConfigureSaga<OrderState>(context, s =>
             // {

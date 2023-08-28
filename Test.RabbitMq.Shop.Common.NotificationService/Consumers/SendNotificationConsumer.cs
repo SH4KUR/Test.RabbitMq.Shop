@@ -45,7 +45,7 @@ public class SendNotificationConsumer : IConsumer<ISendNotificationEvent>
         var d20dice = new Random();
         var roll = d20dice.Next(1, 21);
 
-        _logger.LogWarning($"Notification success ({check}): roll - {roll}");
+        _logger.LogWarning($"DND: Notification success ({check}) roll - {roll}");
         
         return roll >= check;
     }

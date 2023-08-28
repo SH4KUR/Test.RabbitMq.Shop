@@ -43,7 +43,7 @@ public class SendNotificationConsumer : IConsumer<ISendNotificationEvent>
     {
         const int check = 11;
         var d20dice = new Random();
-        var roll = d20dice.Next(1, 20);
+        var roll = d20dice.Next(1, 21);
 
         _logger.LogWarning($"Notification success ({check}): roll - {roll}");
         

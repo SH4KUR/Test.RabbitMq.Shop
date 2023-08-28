@@ -17,6 +17,8 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+        
+        cfg.UseMessageRetry(r => r.Interval(3, 1000));
     });
 });
 

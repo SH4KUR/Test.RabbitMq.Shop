@@ -18,10 +18,10 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-                
+        
         cfg.ReceiveEndpoint(QueueNames.NotificationQueueName, c =>
         {
-            c.UseMessageRetry(r => r.Interval(5, 1000));
+            c.UseMessageRetry(r => r.Interval(1, 1000));
             
             c.ConfigureConsumer<SendNotificationConsumer>(context);
             c.ConfigureConsumer<CheckNotificationConsumer>(context);

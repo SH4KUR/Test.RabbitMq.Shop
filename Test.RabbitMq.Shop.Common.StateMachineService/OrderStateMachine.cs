@@ -10,8 +10,10 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
     
     public Event<IOrderCreatedEvent> OrderCreatedEvent { get; set; }
     public Event<INotificationSentEvent> NotificationSentEvent { get; set; }
+    public Event<Fault<ISendNotificationEvent>> SendNotificationFaultEvent { get; set; }
     
     public State OrderCreated { get; set; }
+    public State SendNotificationFault { get; set; }
     public State NotificationSent { get; set; }
     
     public OrderStateMachine(ILogger<OrderStateMachine> logger)
@@ -21,18 +23,26 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
 
         Event(() => OrderCreatedEvent);
         Event(() => NotificationSentEvent);
+        Event(() => SendNotificationFaultEvent,
+            x => x.CorrelateById(
+                ctx => ctx.InitiatorId ?? ctx.Message.Message.CorrelationId));
         
         Initially(
             When(OrderCreatedEvent)
                 .Then(ctx => 
                     _logger.LogWarning($"OrderCreatedEvent message: {JsonConvert.SerializeObject(ctx.Message)}"))
                 .Then(ctx => ctx.Saga.OrderId = ctx.Message.OrderId)
-                // .Publish(ctx 
-                //     => new SendNotificationEvent(ctx.Saga.CorrelationId, ctx.Message.OrderId))
                 .Send(new Uri($"queue:{QueueNames.NotificationQueueName}"),
                     ctx => 
                         new SendNotificationEvent(ctx.Saga.CorrelationId, ctx.Message.OrderId))
                 .TransitionTo(OrderCreated));
+
+        During(OrderCreated,
+            When(SendNotificationFaultEvent)
+                .Then(ctx =>
+                    _logger.LogError(
+                        $"SendNotificationFaultEvent message: {JsonConvert.SerializeObject(ctx.Message)}"))
+                .TransitionTo(SendNotificationFault));
         
         During(OrderCreated,
             When(NotificationSentEvent)

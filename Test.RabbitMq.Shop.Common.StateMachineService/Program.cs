@@ -24,8 +24,7 @@ builder.Services.AddMassTransit(x =>
           
         cfg.ReceiveEndpoint(QueueNames.OrderSagaQueueName, c =>
         {
-            c.PrefetchCount = 20;
-            c.UseMessageRetry(r => r.Interval(5, 1000));
+            c.UseMessageRetry(r => r.Interval(3, 1000));
 
             c.StateMachineSaga<OrderState>(context);
         });

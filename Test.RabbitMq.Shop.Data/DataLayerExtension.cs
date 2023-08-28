@@ -7,7 +7,7 @@ namespace Test.RabbitMq.Shop.Data;
 
 public static class DataLayerExtension
 {
-    public static IServiceCollection AddDataLayerDependencies(this IServiceCollection services)
+    public static void AddDataLayerDependencies(this IServiceCollection services)
     {
         services.AddDbContext<TestShopContext>(
             o => o.UseInMemoryDatabase("TestShopDb"));
@@ -15,7 +15,5 @@ public static class DataLayerExtension
         services.AddScoped<TestDataSeeder>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
-            
-        return services;
     }
 }

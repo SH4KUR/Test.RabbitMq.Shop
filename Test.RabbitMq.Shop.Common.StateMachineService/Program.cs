@@ -1,5 +1,6 @@
 ﻿using MassTransit;
-using Test.RabbitMq.Shop.Common.StateMachineService.Saga;
+using Test.RabbitMq.Shop.Common;
+using Test.RabbitMq.Shop.Common.StateMachineService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +8,9 @@ builder.WebHost.UseUrls("http://localhost:5002/");
 
 builder.Services.AddMassTransit(x =>
 {
-    //x.SetInMemorySagaRepositoryProvider();
     x.AddSagaStateMachine<OrderStateMachine, OrderState>()
-        .Endpoint(e => { e.Name = "order-saga"; })
+        .Endpoint(e => { e.Name = QueueNames.OrderSagaQueueName; })
         .InMemoryRepository();
-    //x.AddSagas(typeof(Program).Assembly);
     
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -21,23 +20,12 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
           
-        cfg.ReceiveEndpoint("order-saga", c =>
+        cfg.ReceiveEndpoint(QueueNames.OrderSagaQueueName, c =>
         {
-            const int ConcurrencyLimit = 20; // this can go up, depending upon the database capacity
-
-            c.PrefetchCount = ConcurrencyLimit;
-            //c.StateMachineSaga<OrderState>(context);
-            
-            // c.ConfigureSaga<OrderState>(context, s =>
-            // {
-            //     var partition = c.CreatePartitioner(ConcurrencyLimit);
-            //     
-            //     s.Message<OrderCreatedEvent>(x => x.UsePartitioner(partition, m => m.Message.CorrelationId));
-            //     s.Message<SendNotificationEvent>(x => x.UsePartitioner(partition, m => m.Message.CorrelationId));
-            //     s.Message<NotificationSentEvent>(x => x.UsePartitioner(partition, m => m.Message.CorrelationId));
-            // });
-            
+            c.PrefetchCount = 20;
             c.UseMessageRetry(r => r.Interval(5, 1000));
+
+            c.StateMachineSaga<OrderState>(context);
         });
     });
 });

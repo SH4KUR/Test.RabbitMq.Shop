@@ -1,6 +1,6 @@
 using MassTransit;
 
-namespace Test.RabbitMq.Shop.Common.StateMachineService.Saga;
+namespace Test.RabbitMq.Shop.Common.StateMachineService;
 
 public class OrderState : SagaStateMachineInstance
 {

@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Test.RabbitMq.Shop.Api.Helpers;
 using Test.RabbitMq.Shop.Api.Models;
 using Test.RabbitMq.Shop.Common.Messages;
@@ -61,22 +62,16 @@ public class OrderController : ControllerBase
         _orderRepository.AddOrder(newOrder);
         
         _logger.LogInformation($"Order {newOrder.Id} added");
-        
-        // await _publishEndpoint.Publish(new OrderCreatedEvent(
-        await _bus.Publish(new OrderCreatedEvent(
+
+        var message = new OrderCreatedEvent(
             newOrder.Id,
-            product.Id, 
-            model.ProductQuantity, 
-            newOrder.OrderPrice));
+            product.Id,
+            model.ProductQuantity,
+            newOrder.OrderPrice);
         
-        // var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:order-saga"));
-        // await sendEndpoint.Send(new OrderCreatedEvent( 
-        //     newOrder.Id,
-        //     product.Id, 
-        //     model.ProductQuantity, 
-        //     newOrder.OrderPrice));
+        await _publishEndpoint.Publish(message);
         
-        _logger.LogInformation($"OrderCreatedEvent message published");
+        _logger.LogWarning($"OrderCreatedEvent message published: {JsonConvert.SerializeObject(message)}");
         
         return Ok();
     }

@@ -27,9 +27,10 @@ public class SendNotificationConsumer : IConsumer<ISendNotificationEvent>
         // imitation of sending an email
         _logger.LogWarning($"Notification on email: {DateTime.Now:G} - Order {message.OrderId}");
         
-        // var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:order-saga"));
-        // await sendEndpoint.Send(new NotificationSentEvent(message.CorrelationId, message.OrderId));
+        var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(
+            new Uri($"queue:{QueueNames.OrderSagaQueueName}"));
+        await sendEndpoint.Send(new NotificationSentEvent(message.CorrelationId, message.OrderId));
         
-        await _publishEndpoint.Publish(new NotificationSentEvent(message.CorrelationId, message.OrderId));
+        // await _publishEndpoint.Publish(new NotificationSentEvent(message.CorrelationId, message.OrderId));
     }
 }

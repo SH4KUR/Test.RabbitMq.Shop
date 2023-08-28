@@ -1,5 +1,6 @@
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Test.RabbitMq.Shop.Api.Helpers;
 using Test.RabbitMq.Shop.Api.Models;
 using Test.RabbitMq.Shop.Common.Messages;
@@ -16,13 +17,17 @@ public class OrderController : ControllerBase
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly IBus _bus;
+    private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint)
+    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
     {
         _logger = logger;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _publishEndpoint = publishEndpoint;
+        _sendEndpointProvider = sendEndpointProvider;
+        _bus = bus;
     }
 
     [HttpGet]
@@ -38,7 +43,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPost]
-    public ActionResult Post(CreateOrderModel model)
+    public async Task<ActionResult> Post(CreateOrderModel model)
     {
         var product = _productRepository.GetProduct(model.ProductId);
         if (product == null)
@@ -57,15 +62,16 @@ public class OrderController : ControllerBase
         _orderRepository.AddOrder(newOrder);
         
         _logger.LogInformation($"Order {newOrder.Id} added");
-        
-        _publishEndpoint.Publish(new OrderCreatedEvent(
-            Guid.NewGuid(), 
+
+        var message = new OrderCreatedEvent(
             newOrder.Id,
-            product.Id, 
-            model.ProductQuantity, 
-            newOrder.OrderPrice));
+            product.Id,
+            model.ProductQuantity,
+            newOrder.OrderPrice);
         
-        _logger.LogInformation($"OrderCreatedEvent message published");
+        await _publishEndpoint.Publish(message);
+        
+        _logger.LogWarning($"OrderCreatedEvent message published: {JsonConvert.SerializeObject(message)}");
         
         return Ok();
     }

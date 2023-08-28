@@ -1,15 +1,15 @@
-﻿using MassTransit;
+using MassTransit;
 
 namespace Test.RabbitMq.Shop.Common.Messages;
 
-public interface INotificationSentEvent : CorrelatedBy<Guid>
+public interface ICheckNotificationEvent : CorrelatedBy<Guid>
 {
     public Guid OrderId { get; set; }
 }
 
-public class NotificationSentEvent : INotificationSentEvent
+public class CheckNotificationEvent : ICheckNotificationEvent
 {
-    public NotificationSentEvent(Guid correlationId, Guid orderId)
+    public CheckNotificationEvent(Guid correlationId, Guid orderId)
     {
         CorrelationId = correlationId;
         OrderId = orderId;

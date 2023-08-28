@@ -17,4 +17,5 @@
       <ProjectReference Include="..\Test.RabbitMq.Shop.Core\Test.RabbitMq.Shop.Core.csproj" />
     </ItemGroup>
 
+
 </Project>

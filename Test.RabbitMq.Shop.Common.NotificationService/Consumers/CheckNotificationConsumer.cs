@@ -4,23 +4,23 @@ using Test.RabbitMq.Shop.Common.Messages;
 
 namespace Test.RabbitMq.Shop.Common.NotificationService.Consumers;
 
-public class NotificationSentConsumer : IConsumer<NotificationSentEvent>
+public class CheckNotificationConsumer : IConsumer<ICheckNotificationEvent>
 {
-    private readonly ILogger<NotificationSentConsumer> _logger;
+    private readonly ILogger<CheckNotificationConsumer> _logger;
 
-    public NotificationSentConsumer(ILogger<NotificationSentConsumer> logger)
+    public CheckNotificationConsumer(ILogger<CheckNotificationConsumer> logger)
     {
         _logger = logger;
     }
 
-    public Task Consume(ConsumeContext<NotificationSentEvent> context)
+    public Task Consume(ConsumeContext<ICheckNotificationEvent> context)
     {
         var message = context.Message;
         var jsonMessage = JsonConvert.SerializeObject(message);
         
-        _logger.LogInformation($"NotificationSentConsumer message: {jsonMessage}");
+        _logger.LogInformation($"ICheckNotificationEvent message: {jsonMessage}");
         
-        // simulate receiving an email
+        // simulated email verification
         _logger.LogWarning("Notification message was received");
         
         return Task.CompletedTask;

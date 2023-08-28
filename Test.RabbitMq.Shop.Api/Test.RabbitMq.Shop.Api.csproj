@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="MassTransit" Version="8.1.0" />
+        <PackageReference Include="MassTransit.AspNetCore" Version="7.3.1" />
         <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
@@ -20,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Test.RabbitMq.Shop.Common.NotificationService\Test.RabbitMq.Shop.Common.NotificationService.csproj" />
       <ProjectReference Include="..\Test.RabbitMq.Shop.Common\Test.RabbitMq.Shop.Common.csproj" />
       <ProjectReference Include="..\Test.RabbitMq.Shop.Core\Test.RabbitMq.Shop.Core.csproj" />
       <ProjectReference Include="..\Test.RabbitMq.Shop.Data\Test.RabbitMq.Shop.Data.csproj" />

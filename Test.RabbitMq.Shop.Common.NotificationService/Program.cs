@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddMassTransit(x =>
 {
+    x.SetKebabCaseEndpointNameFormatter();
+
     x.AddConsumer<SendNotificationConsumer>();
     x.AddConsumer<CheckNotificationConsumer>();
 

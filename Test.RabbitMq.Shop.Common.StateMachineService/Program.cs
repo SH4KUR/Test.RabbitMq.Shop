@@ -8,6 +8,8 @@ builder.WebHost.UseUrls("http://localhost:5002/");
 
 builder.Services.AddMassTransit(x =>
 {
+    x.SetKebabCaseEndpointNameFormatter();
+    
     x.AddSagaStateMachine<OrderStateMachine, OrderState>()
         .Endpoint(e => { e.Name = QueueNames.OrderSagaQueueName; })
         .InMemoryRepository();

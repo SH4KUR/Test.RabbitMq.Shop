@@ -6,7 +6,6 @@ public class OrderModel
 {
     public Guid Id { get; set; }
     public ProductModel Product { get; set; }
-    public int ProductQuantity { get; set; }
     public decimal OrderPrice { get; set; }
     public DateTime CreationDateTime { get; set; }
 }

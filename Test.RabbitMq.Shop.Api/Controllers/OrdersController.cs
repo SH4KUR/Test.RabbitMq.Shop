@@ -11,16 +11,16 @@ namespace Test.RabbitMq.Shop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrderController : ControllerBase
+public class OrdersController : ControllerBase
 {
-    private readonly ILogger<OrderController> _logger;
+    private readonly ILogger<OrdersController> _logger;
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IPublishEndpoint _publishEndpoint;
     private readonly IBus _bus;
     private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
+    public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
     {
         _logger = logger;
         _orderRepository = orderRepository;
@@ -42,10 +42,10 @@ public class OrderController : ControllerBase
         return Ok(model);
     }
     
-    [HttpPost]
-    public async Task<ActionResult> Post(CreateOrderModel model)
+    [HttpPost("productId")]
+    public async Task<ActionResult> Post(int productId)
     {
-        var product = _productRepository.GetProduct(model.ProductId);
+        var product = _productRepository.GetProduct(productId);
         if (product == null)
         {
             return NotFound();
@@ -55,8 +55,7 @@ public class OrderController : ControllerBase
         {
             Id = Guid.NewGuid(),
             ProductId = product.Id,
-            ProductQuantity = model.ProductQuantity,
-            OrderPrice = model.ProductQuantity * product.Price,
+            OrderPrice = product.Price,
             CreationDateTime = DateTime.Now
         };
         _orderRepository.AddOrder(newOrder);
@@ -66,7 +65,6 @@ public class OrderController : ControllerBase
         var message = new OrderCreatedEvent(
             newOrder.Id,
             product.Id,
-            model.ProductQuantity,
             newOrder.OrderPrice);
         
         await _publishEndpoint.Publish(message);

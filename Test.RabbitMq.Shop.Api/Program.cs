@@ -3,7 +3,6 @@ using Test.RabbitMq.Shop.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDataLayerDependencies();
 
 builder.Services.AddMassTransit(x =>
@@ -37,6 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(b =>b.AllowAnyOrigin());
 app.UseAuthorization();
 app.MapControllers();
 

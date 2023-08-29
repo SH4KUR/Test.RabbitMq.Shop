@@ -38,19 +38,22 @@ public class TestDataSeeder
             {
                 Id = 1,
                 Name = "First Test Product",
-                Price = (decimal)99.99
+                Price = (decimal)99.99,
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut tincidunt."
             },
             new Product
             {
                 Id = 2,
                 Name = "Second Test Product",
-                Price = (decimal)235.00
+                Price = (decimal)235.00,
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas et nulla."
             },
             new Product
             {
                 Id = 3,
                 Name = "Third Test Product",
-                Price = (decimal)128.56
+                Price = (decimal)128.56,
+                Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ut efficitur."
             });
     }
 }

@@ -28,7 +28,8 @@ public static class EntityMapper
         {
             Id = product.Id,
             Name = product.Name,
-            Price = product.Price
+            Price = product.Price,
+            Description = product.Description
         };
     }
 }

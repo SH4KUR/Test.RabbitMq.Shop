@@ -1,0 +1,12 @@
+<h2>Products</h2>
+
+<ul class="products">
+  <li *ngFor="let product of products">
+    <button [class.selected]="product === selectedProduct" type="button" (click)="onSelect(product)">
+      <span class="badge">{{product.id}}</span>
+      <span class="name">{{product.name}}</span>
+    </button>
+  </li>
+</ul>
+
+<app-product-detail [product]="selectedProduct"></app-product-detail>

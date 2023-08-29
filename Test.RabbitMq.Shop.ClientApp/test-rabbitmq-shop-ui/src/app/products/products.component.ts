@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PRODUCTS } from '../mock-products';
 import { Product } from '../product';
+import { ProductService } from '../product.service';
 
 @Component({
   selector: 'app-products',
@@ -9,9 +10,19 @@ import { Product } from '../product';
 })
 
 export class ProductsComponent {
-  products = PRODUCTS;
-
+  products: Product[] = [];
   selectedProduct?: Product;
+
+  constructor(private productService: ProductService) { }
+
+  ngOnInit(): void {
+    this.getProducts();
+  }
+
+  getProducts() {
+    this.productService.getProducts()
+      .subscribe(products => this.products = products);
+  }
 
   onSelect(product: Product) {
     this.selectedProduct = product;

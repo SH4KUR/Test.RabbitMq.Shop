@@ -1,6 +1,7 @@
 using MassTransit;
 using Newtonsoft.Json;
-using Test.RabbitMq.Shop.Common.Messages;
+using Test.RabbitMq.Shop.Common.Messages.Commands;
+using Test.RabbitMq.Shop.Common.Messages.Events;
 
 namespace Test.RabbitMq.Shop.Common.NotificationService.Consumers;
 

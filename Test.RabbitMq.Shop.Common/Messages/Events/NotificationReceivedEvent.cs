@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace Test.RabbitMq.Shop.Common.Messages;
+namespace Test.RabbitMq.Shop.Common.Messages.Events;
 
 public interface INotificationReceivedEvent : CorrelatedBy<Guid>
 {

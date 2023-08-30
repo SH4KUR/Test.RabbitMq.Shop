@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 
 export class ProductDetailComponent {
   @Input() product?: Product;
+  
+  productQuantity: number = 1;
 
   constructor(
     private orderService: OrderService,
@@ -19,7 +21,7 @@ export class ProductDetailComponent {
 
   orderProduct(): void {
     if (this.product) {
-      this.orderService.addOrder(this.product.id)
+      this.orderService.addOrder(this.product.id, this.productQuantity)
         .subscribe(() => this.goToOrders());
     }
   }

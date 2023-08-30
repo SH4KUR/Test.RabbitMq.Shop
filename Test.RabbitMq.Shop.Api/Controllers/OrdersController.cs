@@ -43,9 +43,9 @@ public class OrdersController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] int productId)
+    public async Task<ActionResult> Post(CreateOrderModel model)
     {
-        var product = _productRepository.GetProduct(productId);
+        var product = _productRepository.GetProduct(model.ProductId);
         if (product == null)
         {
             return NotFound();
@@ -55,7 +55,8 @@ public class OrdersController : ControllerBase
         {
             Id = Guid.NewGuid(),
             ProductId = product.Id,
-            OrderPrice = product.Price,
+            OrderPrice = product.Price * model.ProductQuantity,
+            ProductQuantity = model.ProductQuantity,
             CreationDateTime = DateTime.Now
         };
         _orderRepository.AddOrder(newOrder);

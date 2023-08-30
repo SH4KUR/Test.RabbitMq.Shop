@@ -17,6 +17,7 @@ public static class EntityMapper
             Id = order.Id,
             Product = MapProductToModel(product),
             OrderPrice = order.OrderPrice,
+            ProductQuantity = order.ProductQuantity,
             CreationDateTime = order.CreationDateTime
         };
     }

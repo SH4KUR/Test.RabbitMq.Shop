@@ -23,8 +23,8 @@ export class OrderService {
       );
   }
 
-  addOrder(productId: number): Observable<any> {
-    return this.http.post(this.ordersApiUrl, productId, this.httpOptions)
+  addOrder(productId: number, productQuantity: number): Observable<any> {
+    return this.http.post(this.ordersApiUrl, { productId, productQuantity }, this.httpOptions)
       .pipe(
         tap(_ => console.log('order added')),
         catchError(this.handleError<any>('addOrder', []))

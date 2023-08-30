@@ -1,5 +1,3 @@
-using System.Data.Common;
-
 namespace Test.RabbitMq.Shop.Api.Models;
 
 public class OrderModel

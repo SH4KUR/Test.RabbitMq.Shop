@@ -17,17 +17,13 @@ public class OrdersController : ControllerBase
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly IBus _bus;
-    private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
+    public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _publishEndpoint = publishEndpoint;
-        _sendEndpointProvider = sendEndpointProvider;
-        _bus = bus;
     }
 
     [HttpGet]
@@ -59,7 +55,7 @@ public class OrdersController : ControllerBase
             ProductQuantity = model.ProductQuantity,
             CreationDateTime = DateTime.Now
         };
-        _orderRepository.AddOrder(newOrder);
+        await _orderRepository.AddOrderAsync(newOrder);
         
         _logger.LogInformation($"Order {newOrder.Id} added");
 

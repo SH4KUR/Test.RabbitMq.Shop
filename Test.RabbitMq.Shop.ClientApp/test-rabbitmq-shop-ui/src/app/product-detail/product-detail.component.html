@@ -1,0 +1,10 @@
+<div *ngIf="product">
+    <h3>'{{product.name}}' details</h3>
+
+    <div>id: {{product.id}}</div>
+    <div>price: {{product.price | number:"1.2-2"}}</div>
+    <div>description: {{product.description}}</div>
+
+    <input type="number" min="1" max="10" [(ngModel)]="productQuantity">
+    <button type="button" (click)="orderProduct()">order</button>
+</div>

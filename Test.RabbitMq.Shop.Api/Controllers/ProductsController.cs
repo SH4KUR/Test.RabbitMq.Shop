@@ -7,14 +7,12 @@ namespace Test.RabbitMq.Shop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductController : ControllerBase
+public class ProductsController : ControllerBase
 {
-    private readonly ILogger<ProductController> _logger;
     private readonly IProductRepository _productRepository;
 
-    public ProductController(ILogger<ProductController> logger, IProductRepository productRepository)
+    public ProductsController(IProductRepository productRepository)
     {
-        _logger = logger;
         _productRepository = productRepository;
     }
 

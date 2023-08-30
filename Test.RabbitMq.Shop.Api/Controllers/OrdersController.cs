@@ -11,23 +11,19 @@ namespace Test.RabbitMq.Shop.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class OrderController : ControllerBase
+public class OrdersController : ControllerBase
 {
-    private readonly ILogger<OrderController> _logger;
+    private readonly ILogger<OrdersController> _logger;
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly IPublishEndpoint _publishEndpoint;
-    private readonly IBus _bus;
-    private readonly ISendEndpointProvider _sendEndpointProvider;
 
-    public OrderController(ILogger<OrderController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint, ISendEndpointProvider sendEndpointProvider, IBus bus)
+    public OrdersController(ILogger<OrdersController> logger, IOrderRepository orderRepository, IProductRepository productRepository, IPublishEndpoint publishEndpoint)
     {
         _logger = logger;
         _orderRepository = orderRepository;
         _productRepository = productRepository;
         _publishEndpoint = publishEndpoint;
-        _sendEndpointProvider = sendEndpointProvider;
-        _bus = bus;
     }
 
     [HttpGet]
@@ -55,18 +51,17 @@ public class OrderController : ControllerBase
         {
             Id = Guid.NewGuid(),
             ProductId = product.Id,
+            OrderPrice = product.Price * model.ProductQuantity,
             ProductQuantity = model.ProductQuantity,
-            OrderPrice = model.ProductQuantity * product.Price,
             CreationDateTime = DateTime.Now
         };
-        _orderRepository.AddOrder(newOrder);
+        await _orderRepository.AddOrderAsync(newOrder);
         
         _logger.LogInformation($"Order {newOrder.Id} added");
 
         var message = new OrderCreatedEvent(
             newOrder.Id,
             product.Id,
-            model.ProductQuantity,
             newOrder.OrderPrice);
         
         await _publishEndpoint.Publish(message);

@@ -3,6 +3,7 @@
 <ul class="orders">
   <li *ngFor="let order of orders">
     <h4>{{order.creationDateTime | date:'medium' }}</h4>
+    
     <div><b>product: {{order.product.name}}</b></div>
     <div>product description: {{order.product.description}}</div>
     <div>order price: {{order.orderPrice | number:"1.2-2"}}</div>

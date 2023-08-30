@@ -42,8 +42,8 @@ public class OrdersController : ControllerBase
         return Ok(model);
     }
     
-    [HttpPost("productId")]
-    public async Task<ActionResult> Post(int productId)
+    [HttpPost]
+    public async Task<ActionResult> Post([FromBody] int productId)
     {
         var product = _productRepository.GetProduct(productId);
         if (product == null)

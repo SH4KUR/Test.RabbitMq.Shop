@@ -8,7 +8,10 @@ import { Order } from './order';
   providedIn: 'root'
 })
 export class OrderService {
-  private ordersApiUrl = 'https://localhost:7019/api/orders'
+  private ordersApiUrl = 'https://localhost:7019/api/orders';
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 
   constructor(private http: HttpClient) { }
 
@@ -17,6 +20,14 @@ export class OrderService {
       .pipe(
         tap(_ => console.log('orders fetched')),
         catchError(this.handleError<Order[]>('getOrders', []))
+      );
+  }
+
+  addOrder(productId: number): Observable<any> {
+    return this.http.post(this.ordersApiUrl, productId, this.httpOptions)
+      .pipe(
+        tap(_ => console.log('order added')),
+        catchError(this.handleError<any>('addOrder', []))
       );
   }
 

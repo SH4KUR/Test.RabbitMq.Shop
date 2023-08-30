@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Product } from '../product';
+import { OrderService } from '../order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-detail',
@@ -9,4 +11,20 @@ import { Product } from '../product';
 
 export class ProductDetailComponent {
   @Input() product?: Product;
+
+  constructor(
+    private orderService: OrderService,
+    private router: Router
+  ) { }
+
+  orderProduct(): void {
+    if (this.product) {
+      this.orderService.addOrder(this.product.id)
+        .subscribe(() => this.goToOrders());
+    }
+  }
+
+  goToOrders() {
+    this.router.navigate(['/', 'orders']);
+  }
 }

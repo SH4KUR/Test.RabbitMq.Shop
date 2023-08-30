@@ -8,9 +8,18 @@
 
 <h4>local startup:</h4>
 
-1. Run **RabbitMQ** from Docker: <code>docker run -d --hostname my-rabbitmq-server --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management</code>
-2. Run Web API project **Test.RabbitMq.Shop.Api**
-3. Run Web Console App **Test.RabbitMq.Shop.Common.StateMachineService**
-4. Run Web Console App **Test.RabbitMq.Shop.Common.NotificationService**
-5. Run Angular application **Test.RabbitMq.Shop.ClientApp/test-rabbitmq-shop-ui**
-6. Open http://localhost:4200
+1. Build & Run:
+   - **RabbitMQ** from Docker
+     
+     ```
+       docker run -d --hostname my-rabbitmq-server --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+     ```
+   
+   - Web API project **Test.RabbitMq.Shop.Api**
+   - Web Console App **Test.RabbitMq.Shop.Common.StateMachineService**
+   - Web Console App **Test.RabbitMq.Shop.Common.NotificationService**
+   - Angular App **Test.RabbitMq.Shop.ClientApp/test-rabbitmq-shop-ui**
+     ```
+       npm run start
+     ```
+2. Open `http://localhost:4200`

@@ -17,6 +17,12 @@ public class OrderRepository : IOrderRepository
         _context.Orders.Add(order);
         _context.SaveChanges();
     }
+    
+    public async Task AddOrderAsync(Order order)
+    {
+        await _context.Orders.AddAsync(order);
+        await _context.SaveChangesAsync();
+    }
 
     public IEnumerable<Order> GetOrders()
     {

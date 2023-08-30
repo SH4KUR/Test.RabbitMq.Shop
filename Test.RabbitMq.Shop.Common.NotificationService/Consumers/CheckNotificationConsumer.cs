@@ -21,7 +21,7 @@ public class CheckNotificationConsumer : IConsumer<ICheckNotificationEvent>
         _logger.LogInformation($"ICheckNotificationEvent message: {jsonMessage}");
         
         // simulated email verification
-        _logger.LogWarning("Notification message was received");
+        _logger.LogWarning($"Notification message for {message.OrderId} order was received");
         
         return Task.CompletedTask;
     }

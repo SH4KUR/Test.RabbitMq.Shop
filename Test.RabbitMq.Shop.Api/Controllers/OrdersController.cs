@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Test.RabbitMq.Shop.Api.Helpers;
 using Test.RabbitMq.Shop.Api.Models;
-using Test.RabbitMq.Shop.Common.Messages;
+using Test.RabbitMq.Shop.Common.Messages.Events;
 using Test.RabbitMq.Shop.Core.Entities;
 using Test.RabbitMq.Shop.Core.Interfaces;
 
